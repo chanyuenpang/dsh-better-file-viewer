@@ -1,5 +1,11 @@
-import test from 'node:test';
+import test, {after} from 'node:test';
 import assert from 'node:assert/strict';
+import {DOMParser} from 'linkedom';
+// The pinned browser renderer parses KaTeX markup while collecting links.
+// Supply its browser prerequisite in Node tests without changing production code.
+const previousDOMParser=globalThis.DOMParser;
+globalThis.DOMParser??=DOMParser;
+after(()=>{if(previousDOMParser===undefined)delete globalThis.DOMParser;else globalThis.DOMParser=previousDOMParser;});
 import {readFile} from 'node:fs/promises';
 import {fileURLToPath} from 'node:url';
 import {createRequire} from 'node:module';

@@ -2,6 +2,24 @@
 
 独立的 DSH「文件」会话视图。新增会话视图，不改动、接管或替换原侧栏。
 
+## 安装（无需克隆源码）
+
+适配基线：DSH Desktop/Web **0.2.2-rc.1**。在 DSH Desktop 的插件管理器中选择安装，输入预构建包地址：
+
+```text
+https://github.com/chanyuenpang/dsh-better-file-viewer/releases/download/v0.1.11/dsh-better-file-viewer-0.1.11.tgz
+```
+
+普通 Web profile 可使用：
+
+```sh
+dsh plugin --profile web add https://github.com/chanyuenpang/dsh-better-file-viewer/releases/download/v0.1.11/dsh-better-file-viewer-0.1.11.tgz
+```
+
+安装包已包含浏览器构建产物，无需本地构建或手动复制文件。插件市场条目正在提交；收录后可搜索 `dsh-better-file-viewer`。是否需要刷新或重启以插件管理器的结果为准，不会自动重启 DSH。
+
+Office 预览依赖宿主的 `officeToPdf` 服务；本插件不安装 Office 转换运行时。不支持的宿主版本未经过兼容性验证。
+
 ## 功能
 
 - 文件导航与预览同屏，可放在左、右、上、下；鼠标拖动或键盘方向键调整分隔。左右采用文件树，上下采用横向层级分栏（一级一列、各列独立滚动），降低目录导航的竖直高度需求。
