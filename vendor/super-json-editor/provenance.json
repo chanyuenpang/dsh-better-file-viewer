@@ -1,0 +1,23 @@
+{
+  "source": "G:/Projects/super-json-editor",
+  "capturedAt": "2026-11-12T13:21:45.873Z",
+  "files": {
+    "src/core/document.ts": "05eadd924279181950670bba03ae16b3fa9719ea0d4d99a4069850495c96376c",
+    "src/core/navigation.ts": "596cee8ec71cff850bc4def67649a6a716dd209c47b583e94f7fa1c2f069adfa",
+    "src/core/path.ts": "21b2db025de326158954f9a65306cfcdcdf6d500dd3a636fab1136480dc37b38",
+    "src/editor/AssetPickerFieldEditor.tsx": "a120eef5d73d2cc8db499d298ad64f4bbbe8e063e741d706fc4e34674bcd0f14",
+    "src/editor/Breadcrumbs.tsx": "b1c11fa91b9519adbb0bacd7fe20a8a28cb10db5d5996a6d53425b6b513f8f62",
+    "src/editor/column-dnd.ts": "c25a6f4089f9c7215e745fc71c9818435685a469ef3530379ead6b4f76796d65",
+    "src/editor/EditorShell.tsx": "80cd9c054a540443acf3a09d58da41712b226367e15d129506ee466c8f4e7111",
+    "src/editor/host.ts": "783e5a3fe1c794a8a4ed61d67f2e5682d873c07adbf70de65a15e18e97bc3034",
+    "src/editor/icons.ts": "1f1c90eb3bbb519184803978896744ce95cd886f0aa9b23c76f21c2aa9dfa072",
+    "src/editor/schema.ts": "00ed33d143a7b4b68eff33ed62ac20b7d550ac4b77bc19a73bfac505bc317070",
+    "src/editor/SchemaColumnHeader.tsx": "aa17db9628d16cbf4e8157b781f0a5fbfac5dba2c792063ce051690ece46530b",
+    "src/editor/SchemaOptionFieldEditor.tsx": "f7ea1180f0257a7f8b4eccf484d5d5b944a0f9d040c42c8bee0d0de2e0637cac",
+    "src/editor/stack-motion.ts": "62a3f5c217781a036a10b2a4f85118739991869474a60de7edb27a3edf2d4c6a",
+    "src/editor/types.ts": "1ba2ba8235c3e771cf80c04a13b8389a97dbf380716f0f3a876033e9cfe31444",
+    "src/editor/usePressSlopGuard.ts": "81e89a76e0fd4e7c55e8e0c6c4c727b162316ee38b501d7429c4131df66a68cb",
+    "src/editor/ValueInspector.tsx": "5a61a5cafede73f9cf3eba8b3b474941716f461b4c8f6d60daa5f9adb284a4f3",
+    "src/editor/view-schema.ts": "6e9187c1d4d6fb6e0a335947b3fcf5472d95a70a404f568a50013732487fc048"
+  }
+}

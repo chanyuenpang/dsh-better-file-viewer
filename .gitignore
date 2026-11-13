@@ -1,0 +1,16 @@
+# claw-kit
+.claw/*
+!.claw/project.json
+!.claw/truth/
+!.claw/truth/**
+.claw/project-override.json
+node_modules/
+vendor/**/upstream.tgz
+.build/
+
+# Generated archives and local runtime credentials are not source.
+/releases/
+*.tgz
+*.log
+.env
+.env.local

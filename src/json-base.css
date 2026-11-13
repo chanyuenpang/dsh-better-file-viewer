@@ -1,0 +1,6 @@
+/* Embedding bounds only. All SJE typography, controls, colors, object/table
+   layout and decoration come unchanged from the scoped upstream stylesheet. */
+.bfv-json{flex:1 1 0;position:relative;min-width:0;min-height:0;overflow:hidden;margin:0}
+.bfv-json .app-frame{position:absolute;inset:0;height:auto;min-height:0;overflow:hidden}
+.bfv-json .workspace{height:100%;min-width:0;min-height:0}
+.bfv-json .page-stack{height:100%;min-height:0}
