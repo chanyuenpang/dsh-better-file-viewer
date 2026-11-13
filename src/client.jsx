@@ -255,14 +255,14 @@ function FileWorkspace({ sessionId, cwd, files, renderFactorySlot, locale, viewR
 }
 export function createApplication(forkApply, styleText, collectNativeFileLinks) {
   return { inject:['slots','locale','remote','remote.workspaceFiles','resources','configForms','fileDrag'], apply(ctx){
-    const diagnostics=createDiagnostics({workspaceFilesHandleStable:ctx.remote.workspaceFiles===ctx.remote.workspaceFiles,imageProbe:2,get focused(){return document.hasFocus();},get visibility(){return document.visibilityState;}}),pendingFiles=createPendingFileRequests();
+    const diagnostics=createDiagnostics({workspaceFilesHandleStable:ctx.remote.workspaceFiles===ctx.remote.workspaceFiles,imageProbe:3,nativeLinkCollector:typeof collectNativeFileLinks==='function',get focused(){return document.hasFocus();},get visibility(){return document.visibilityState;}}),pendingFiles=createPendingFileRequests();
     registerDiagnostics(ctx,diagnostics);
     const chatSources=createChatLinkSources();
     ctx.effect(()=>()=>chatSources.clear());
     function BoundChatLinkSource(props){
       const nodes=props.useChat(snapshot=>snapshot.nodes),reader=useRef({nodes});
       useLayoutEffect(()=>{reader.current.nodes=nodes;},[nodes]);
-      useLayoutEffect(()=>chatSources.register(props.sessionId,reader.current),[props.sessionId]);
+      useLayoutEffect(()=>{const dispose=chatSources.register(props.sessionId,reader.current);diagnostics.record(props.sessionId,'chat-source-mounted',{chatSourceReady:true});return()=>{dispose();diagnostics.record(props.sessionId,'chat-source-unmounted',{chatSourceReady:false});};},[props.sessionId]);
       return null;
     }
     function ChatLinkSource(props){return typeof props.useChat==='function'?<BoundChatLinkSource {...props}/>:null;}

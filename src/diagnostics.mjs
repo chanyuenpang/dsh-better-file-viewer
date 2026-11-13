@@ -1,6 +1,6 @@
 // Read-only, bounded diagnostics for this plugin's own view. No global click
 // interception, sidebar writes, conversation text or file contents are collected.
-export const DIAGNOSTIC_BUILD='0.1.11';
+export const DIAGNOSTIC_BUILD='0.1.12';
 function safe(value,depth=0){
   if(value===null||typeof value==='boolean'||typeof value==='number')return value;
   if(typeof value==='string'){

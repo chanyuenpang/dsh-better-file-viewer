@@ -40499,17 +40499,37 @@ var MarkdownText = (0, import_react.memo)(function MarkdownText2({ text: text6, 
   });
 });
 function collectNativeFileLinks(text6) {
-  const links = [];
-  function walk(value) {
-    if (Array.isArray(value)) {
-      for (const child of value) walk(child);
-      return;
-    }
-    if (!value || typeof value !== "object" || !value.props) return;
-    if (value.type === MarkdownFileLink) links.push({ ...value.props.file });
-    walk(value.props.children);
+  const root2 = parseGfmWithMath(text6), targets = createReferenceTargets(), links = [], footnotes = [], seen = /* @__PURE__ */ new Set();
+  collectReferenceTargets(root2.children, targets);
+  const containers = /* @__PURE__ */ new Set(["root", "paragraph", "heading", "blockquote", "strong", "emphasis", "delete", "list", "listItem", "table", "tableRow", "tableCell"]);
+  function children(node2) {
+    for (const child of node2.children || []) walk(child);
   }
-  walk(renderSettled(text6, { code: {}, footnotes: "" }, void 0, void 0, false));
+  function link(url) {
+    const file = parseFileLink(url);
+    if (file !== void 0) links.push({ ...file });
+  }
+  function walk(node2) {
+    if (node2.type === "link") {
+      link(node2.url);
+      children(node2);
+    } else if (node2.type === "linkReference") {
+      const definition2 = targets.definitions.get(node2.identifier.toUpperCase());
+      if (definition2) link(definition2.url);
+      children(node2);
+    } else if (node2.type === "footnoteReference") {
+      const id = node2.identifier.toUpperCase();
+      if (!seen.has(id)) {
+        seen.add(id);
+        footnotes.push(id);
+      }
+    } else if (containers.has(node2.type)) children(node2);
+  }
+  walk(root2);
+  for (const id of footnotes) {
+    const definition2 = targets.footnotes.get(id);
+    if (definition2) children(definition2);
+  }
   return links;
 }
 
@@ -62561,7 +62581,7 @@ function consumeFileRequest(request, previous, sessionId, cwd) {
 }
 
 // src/diagnostics.mjs
-var DIAGNOSTIC_BUILD = "0.1.11";
+var DIAGNOSTIC_BUILD = "0.1.12";
 function safe(value, depth = 0) {
   if (value === null || typeof value === "boolean" || typeof value === "number") return value;
   if (typeof value === "string") {
@@ -63452,7 +63472,7 @@ function FileWorkspace({ sessionId, cwd, files, renderFactorySlot, locale, viewR
 }
 function createApplication(forkApply, styleText, collectNativeFileLinks) {
   return { inject: ["slots", "locale", "remote", "remote.workspaceFiles", "resources", "configForms", "fileDrag"], apply(ctx) {
-    const diagnostics = createDiagnostics({ workspaceFilesHandleStable: ctx.remote.workspaceFiles === ctx.remote.workspaceFiles, imageProbe: 2, get focused() {
+    const diagnostics = createDiagnostics({ workspaceFilesHandleStable: ctx.remote.workspaceFiles === ctx.remote.workspaceFiles, imageProbe: 3, nativeLinkCollector: typeof collectNativeFileLinks === "function", get focused() {
       return document.hasFocus();
     }, get visibility() {
       return document.visibilityState;
@@ -63465,7 +63485,14 @@ function createApplication(forkApply, styleText, collectNativeFileLinks) {
       (0, import_react12.useLayoutEffect)(() => {
         reader.current.nodes = nodes;
       }, [nodes]);
-      (0, import_react12.useLayoutEffect)(() => chatSources.register(props.sessionId, reader.current), [props.sessionId]);
+      (0, import_react12.useLayoutEffect)(() => {
+        const dispose = chatSources.register(props.sessionId, reader.current);
+        diagnostics.record(props.sessionId, "chat-source-mounted", { chatSourceReady: true });
+        return () => {
+          dispose();
+          diagnostics.record(props.sessionId, "chat-source-unmounted", { chatSourceReady: false });
+        };
+      }, [props.sessionId]);
       return null;
     }
     function ChatLinkSource(props) {

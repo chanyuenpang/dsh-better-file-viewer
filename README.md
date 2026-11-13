@@ -2,6 +2,24 @@
 
 独立的 DSH「文件」会话视图。新增会话视图，不改动、接管或替换原侧栏。
 
+## 安装（无需克隆源码）
+
+适配基线：DSH Desktop/Web **0.2.2-rc.1**。在 DSH Desktop 的插件管理器中选择安装，输入预构建包地址：
+
+```text
+https://github.com/chanyuenpang/dsh-better-file-viewer/releases/download/v0.1.12/dsh-better-file-viewer-0.1.12.tgz
+```
+
+普通 Web profile 可使用：
+
+```sh
+dsh plugin --profile web add https://github.com/chanyuenpang/dsh-better-file-viewer/releases/download/v0.1.12/dsh-better-file-viewer-0.1.12.tgz
+```
+
+安装包已包含浏览器构建产物，无需本地构建或手动复制文件。插件市场条目正在提交；收录后可搜索 `dsh-better-file-viewer`。是否需要刷新或重启以插件管理器的结果为准，不会自动重启 DSH。
+
+Office 预览依赖宿主的 `officeToPdf` 服务；本插件不安装 Office 转换运行时。不支持的宿主版本未经过兼容性验证。
+
 ## 功能
 
 - 文件导航与预览同屏，可放在左、右、上、下；鼠标拖动或键盘方向键调整分隔。左右采用文件树，上下采用横向层级分栏（一级一列、各列独立滚动），降低目录导航的竖直高度需求。
@@ -130,6 +148,16 @@ JSON 源码快照包含文件哈希；更新时执行 scripts/snapshot-editor.mj
 - 目录请求协调器记住全部已需目录；stop中止请求并把内部loading转idle，start恢复所有中断祖先，不只cwd。通过任务身份+signal+激活状态防止旧结果覆盖新任务；刷新取消旧任务、卸载不再发布，失败仍明确显示并可重试。
 - 新增目录请求start/ready/failed/aborted有界诊断，不读取文件内容；构建成功，79项测试通过。异步测试覆盖深层定位、句柄变化、并发去重、取消/重启、忽略不协作旧请求、刷新竞态、失败重试和卸载。
 - 插件重载applied、无warnings，实时Inspect确认build=0.1.9及服务引用不稳定；用户原始直接打开场景仍需在当前GUI复测，未把协调器单元测试或服务身份探针当成完整浏览器验收。原侧栏、预览与布局交互不改。
+
+## 0.1.12 聊天图片文件链接定位（2026-11-13）
+
+- 用户已确认0.1.9普通文件点击及目录加载修复有效。本次真实点击记录来自另一个会话：图片文件按钮带fileLink类，却没有title、href或子img；原导航已打开文件页，但request和selected均为空。对应官方MarkdownFileLink在有图片悬停预览时有意省略路径title，导致旧交接器拿不到地址。
+- 不替换Chat，不修改原组件或侧栏，也不使用React私有字段、悬停浮层位置、按钮文字来猜路径。通过一个返回null的新增header utility，使用标准useChat selector保留当前已提交Chat源的引用；不增加按钮、不扫描会话日志、不轮询，卸载即释放。
+- 仅真实、普通左键点击缺title的原生fileLink按钮时，按其data-chat-node-key、Markdown块及该块内链接序号，对照同Session已完成/中断assistant节点的原文。使用本地固定版本官方GFM解析器、引用定义表及parseFileLink恢复目标，核对块/链接数量及最多16个已知路径标题，源不一致时不猜目标。
+- 解析器收集数据，不执行组件、TeX渲染或图片读取；支持同名文案、引用链接、链接包裹的缩略图、脚注、空格/转义、行号，并排除代码、外链和单纯内嵌图片。内嵌图片按钮/上传附件继续保持原行为，不将blob/data URL猜作本地文件。
+- 恢复出的真实目标继续交给原有Session/Conversation occurrence隔离、5秒TTL的请求消费链。原点击处理不取消、不阻止传播；文件服务稳定facade、目录取消恢复、官方预览fork、布局和缩放不改。
+- 0.1.10/0.1.11仅为本次定位阶段的只读诊断版本，未作为图片修复发行。诊断现在可发现本页最多16个已观测Session、最近6条图片点击元数据，并有前台页专用Provider，避免按错误会话或后台页查记录；不采集图片字节、消息正文、外链查询参数或凭据。初始agent工具schema未增加，Provider按需发现。
+- 构建成功，94项测试通过；当前已加载0.1.12，nativeLinkCollector=true，实际观察到非可视Chat来源组件挂载。用户在原问题场景复测后明确确认图片已可打开；这是实际用户验收，不是自动浏览器端到端测试。
 
 ## 许可证
 
